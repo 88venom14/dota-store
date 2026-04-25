@@ -1,50 +1,79 @@
-# Welcome to your Expo app 👋
+# Dota 2 Items Store
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile store app for Dota 2 cosmetic items, built with Expo Router, React Native, TypeScript, and Supabase.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Auth** — email/password via Supabase Auth, session persisted across launches.
+- **Store** — grid of items, add-to-cart, rarity filter chips.
+- **Search** — real-time debounced search with live results.
+- **Profile** — change nickname, upload avatar to Supabase Storage, view balance, jump to cart.
+- **Cart** — quantities, totals, mocked checkout that debits balance.
+- **Theme** — dark, red/yellow accents, per-rarity color coding.
 
+## Tech stack
+
+- TypeScript · React Native 0.81 · Expo 54 · Expo Router 6
+- Supabase (Auth + Postgres + Storage)
+- `@supabase/supabase-js`, `@react-native-async-storage/async-storage`, `react-native-url-polyfill`
+
+## Project layout
+
+```
+app/                      Expo Router screens
+  _layout.tsx             Root stack + Auth/Cart providers + auth gate
+  auth.tsx                Login / register
+  cart.tsx                Cart modal (quantities, checkout)
+  (tabs)/
+    _layout.tsx           Bottom tabs (Store, Search, Profile)
+    index.tsx             Store (grid + rarity filter)
+    search.tsx            Search screen
+    profile.tsx           Profile / avatar / balance / cart link
+
+src/
+  components/             ItemCard, FilterBar, SearchBar, Button, RarityBadge, ...
+  constants/theme.ts      Colors, spacing, rarity palette
+  contexts/               AuthContext, CartContext
+  hooks/                  useItems, useItemSearch
+  services/supabase.ts    Supabase client (AsyncStorage-backed session)
+  types/                  item, user, cart, database schema types
+  utils/format.ts         Currency formatting
+
+supabase/
+  schema.sql              Tables, RLS policies, storage bucket
+  seed.sql                Sample items
+```
+
+## Setup
+
+1. **Install deps**
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Create a Supabase project** at https://supabase.com and grab the project URL + anon key.
 
-   ```bash
-   npx expo start
+3. **Run the schema** in the Supabase SQL editor:
+   - paste `supabase/schema.sql` and run (creates tables, RLS, `avatars` bucket)
+   - paste `supabase/seed.sql` and run (adds sample items)
+
+4. **Configure env** — copy `.env.example` to `.env` and fill in:
+   ```
+   EXPO_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR-ANON-KEY
    ```
 
-In the output, you'll find options to open the app in a
+5. **Run the app**
+   ```bash
+   npm run start       # dev server
+   npm run android     # Android emulator / device
+   npm run ios         # iOS simulator / device
+   npm run web         # web preview
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Notes
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- New users are auto-provisioned a profile row with a starting balance of $1000 (tweak in `supabase/schema.sql`).
+- Checkout is mocked: it debits `users.balance` and clears the cart — no payment provider involved.
+- Seed item images come from picsum.photos placeholders; swap them for real CDN URLs later.
+- Email confirmation is on by default in Supabase — disable it for faster local iteration in Auth → Providers → Email.
