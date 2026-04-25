@@ -157,13 +157,11 @@ export default function TopUpScreen() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-          {/* Current balance */}
           <View style={styles.balanceCard}>
             <Text style={styles.balanceLabel}>Текущий баланс</Text>
             <Text style={styles.balanceValue}>{formatCurrency(profile?.balance ?? 0)}</Text>
           </View>
 
-          {/* Saved card or form */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Способ оплаты</Text>
 
@@ -251,7 +249,6 @@ export default function TopUpScreen() {
             )}
           </View>
 
-          {/* Amount selection */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Сумма пополнения</Text>
             <View style={styles.amountsGrid}>
@@ -278,7 +275,6 @@ export default function TopUpScreen() {
 
         </ScrollView>
 
-        {/* Bottom action */}
         <View style={styles.bottomBar}>
           <Button
             title={

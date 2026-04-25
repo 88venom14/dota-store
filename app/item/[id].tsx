@@ -92,12 +92,10 @@ export default function ItemDetailScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Back button */}
         <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
           <Ionicons name="arrow-back" size={22} color={colors.white} />
         </Pressable>
 
-        {/* Hero image */}
         <View style={[styles.imageWrap, { borderColor: rarityColor }]}>
           <Image
             source={{ uri: item.image_url }}
@@ -105,11 +103,9 @@ export default function ItemDetailScreen() {
             contentFit="contain"
             transition={300}
           />
-          {/* Glow overlay tinted by rarity */}
           <View style={[styles.imageGlow, { backgroundColor: `${rarityColor}18` }]} />
         </View>
 
-        {/* Info card */}
         <View style={styles.card}>
           <View style={styles.nameRow}>
             <Text style={styles.name}>{item.name}</Text>
@@ -134,7 +130,6 @@ export default function ItemDetailScreen() {
         </View>
       </ScrollView>
 
-      {/* Sticky bottom bar */}
       <View style={styles.bottomBar}>
         <View style={styles.priceBlock}>
           <Text style={styles.priceLabel}>Цена</Text>

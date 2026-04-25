@@ -188,7 +188,6 @@ export default function ProfileScreen() {
 }
 
 function decodeBase64(b64: string): Uint8Array {
-  // React Native has global atob in Hermes; fall back to manual decode for safety.
   if (typeof globalThis.atob === 'function') {
     const binary = globalThis.atob(b64);
     const bytes = new Uint8Array(binary.length);

@@ -1,79 +1,79 @@
 # Dota 2 Items Store
 
-A mobile store app for Dota 2 cosmetic items, built with Expo Router, React Native, TypeScript, and Supabase.
+Мобильное приложение-магазин косметических предметов Dota 2, построенное на Expo Router, React Native, TypeScript и Supabase.
 
-## Features
+## Функционал
 
-- **Auth** — email/password via Supabase Auth, session persisted across launches.
-- **Store** — grid of items, add-to-cart, rarity filter chips.
-- **Search** — real-time debounced search with live results.
-- **Profile** — change nickname, upload avatar to Supabase Storage, view balance, jump to cart.
-- **Cart** — quantities, totals, mocked checkout that debits balance.
-- **Theme** — dark, red/yellow accents, per-rarity color coding.
+- **Авторизация** — вход/регистрация по email и паролю через Supabase Auth, сессия сохраняется между запусками.
+- **Магазин** — сетка предметов, добавление в корзину, фильтрация по редкости.
+- **Поиск** — поиск с дебаунсом и живыми результатами.
+- **Профиль** — смена никнейма, загрузка аватара в Supabase Storage, просмотр баланса, переход в корзину.
+- **Корзина** — управление количеством, итоговая сумма, оплата с списанием баланса.
+- **Тема** — тёмная, акценты красного/жёлтого, цветовая кодировка по редкости.
 
-## Tech stack
+## Стек технологий
 
 - TypeScript · React Native 0.81 · Expo 54 · Expo Router 6
 - Supabase (Auth + Postgres + Storage)
 - `@supabase/supabase-js`, `@react-native-async-storage/async-storage`, `react-native-url-polyfill`
 
-## Project layout
+## Структура проекта
 
 ```
-app/                      Expo Router screens
-  _layout.tsx             Root stack + Auth/Cart providers + auth gate
-  auth.tsx                Login / register
-  cart.tsx                Cart modal (quantities, checkout)
+app/                      Экраны Expo Router
+  _layout.tsx             Корневой стек + провайдеры Auth/Cart + защита маршрутов
+  auth.tsx                Вход / регистрация
+  cart.tsx                Модальное окно корзины (количество, оплата)
   (tabs)/
-    _layout.tsx           Bottom tabs (Store, Search, Profile)
-    index.tsx             Store (grid + rarity filter)
-    search.tsx            Search screen
-    profile.tsx           Profile / avatar / balance / cart link
+    _layout.tsx           Нижние табы (Магазин, Поиск, Профиль)
+    index.tsx             Магазин (сетка + фильтр по редкости)
+    search.tsx            Экран поиска
+    profile.tsx           Профиль / аватар / баланс / корзина
 
 src/
   components/             ItemCard, FilterBar, SearchBar, Button, RarityBadge, ...
-  constants/theme.ts      Colors, spacing, rarity palette
+  constants/theme.ts      Цвета, отступы, палитра редкостей
   contexts/               AuthContext, CartContext
   hooks/                  useItems, useItemSearch
-  services/supabase.ts    Supabase client (AsyncStorage-backed session)
-  types/                  item, user, cart, database schema types
-  utils/format.ts         Currency formatting
+  services/supabase.ts    Клиент Supabase (сессия через AsyncStorage)
+  types/                  Типы: item, user, cart, схема базы данных
+  utils/format.ts         Форматирование валюты
 
 supabase/
-  schema.sql              Tables, RLS policies, storage bucket
-  seed.sql                Sample items
+  schema.sql              Таблицы, политики RLS, бакет для хранилища
+  seed.sql                Тестовые предметы
 ```
 
-## Setup
+## Установка
 
-1. **Install deps**
+1. **Установи зависимости**
    ```bash
    npm install
    ```
 
-2. **Create a Supabase project** at https://supabase.com and grab the project URL + anon key.
+2. **Создай проект в Supabase** на https://supabase.com и скопируй URL проекта и анонимный ключ.
 
-3. **Run the schema** in the Supabase SQL editor:
-   - paste `supabase/schema.sql` and run (creates tables, RLS, `avatars` bucket)
-   - paste `supabase/seed.sql` and run (adds sample items)
+3. **Примени схему** в SQL-редакторе Supabase:
+   - вставь и выполни `supabase/schema.sql` (создаёт таблицы, RLS, бакет `avatars`)
+   - вставь и выполни `supabase/seed.sql` (добавляет тестовые предметы)
 
-4. **Configure env** — copy `.env.example` to `.env` and fill in:
+4. **Настрой переменные окружения** — скопируй `.env.example` в `.env` и заполни:
    ```
    EXPO_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
    EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR-ANON-KEY
    ```
 
-5. **Run the app**
+5. **Запусти приложение**
    ```bash
-   npm run start       # dev server
-   npm run android     # Android emulator / device
-   npm run ios         # iOS simulator / device
-   npm run web         # web preview
+   npm run start       # dev-сервер
+   npm run android     # Android-эмулятор / устройство
+   npm run ios         # iOS-симулятор / устройство
+   npm run web         # веб-предпросмотр
    ```
 
-## Notes
+## Заметки
 
-- New users are auto-provisioned a profile row with a starting balance of $1000 (tweak in `supabase/schema.sql`).
-- Checkout is mocked: it debits `users.balance` and clears the cart — no payment provider involved.
-- Seed item images come from picsum.photos placeholders; swap them for real CDN URLs later.
-- Email confirmation is on by default in Supabase — disable it for faster local iteration in Auth → Providers → Email.
+- Новым пользователям автоматически создаётся профиль с начальным балансом $1000 (настраивается в `supabase/schema.sql`).
+- Оплата симулируется: списывает `users.balance` и очищает корзину — платёжный провайдер не используется.
+- Изображения тестовых предметов берутся с picsum.photos; замени на реальные CDN-ссылки при необходимости.
+- Подтверждение email включено в Supabase по умолчанию — отключи для быстрой разработки в Auth → Providers → Email.
